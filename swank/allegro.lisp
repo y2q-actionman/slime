@@ -414,7 +414,9 @@
                            (1+ position))))))
           ((typep condition 'reader-error)
            (let ((pos  (car (last (slot-value condition 'excl::format-arguments))))
-                 (file (pathname (stream-error-stream condition))))
+                 (file (or (and context
+                                (excl::source-context-pathname context))
+                           (pathname (stream-error-stream condition)))))
              (when (integerp pos)
                (values file pos))))
           (t
